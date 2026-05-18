@@ -42,16 +42,6 @@ export default function GoFileScraper() {
     return input.trim();
   };
 
-  const getGuestToken = async () => {
-    const res = await fetch("https://api.gofile.io/accounts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    });
-    const data = await res.json();
-    if (data.status === "ok") return data.data.token;
-    throw new Error("Guest token nahi mila");
-  };
-
   const scrape = async () => {
     setLoading(true);
     setError("");
@@ -59,16 +49,8 @@ export default function GoFileScraper() {
     setFolderName("");
 
     const code = extractCode(folderCode);
-    let authToken = token.trim();
-
-    if (!authToken) {
-      try {
-        authToken = await getGuestToken();
-      } catch (e) {
-        // fallback to website token
-        authToken = "16d15cd8934ae7faf1688b21c7262cceea2cdd8f5a5fc0aa533038502b49d941";
-      }
-    }
+    // Website ka public token use karo — bina login ke kaam karta hai
+    const authToken = token.trim() || "16d15cd8934ae7faf1688b21c7262cceea2cdd8f5a5fc0aa533038502b49d941";
 
     try {
       const res = await fetch(
